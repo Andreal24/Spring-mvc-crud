@@ -1,5 +1,8 @@
 package com.example.spring01.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.spring01.entities.Persona;
 import com.example.spring01.services.PersonaService;
@@ -86,6 +90,44 @@ public class PageController {
 		
 	}
 	
+	@GetMapping("/gestione/cf")
+	public String gestioneByCf(@RequestParam String cf, Model model) {
+        List<Persona> risultati = new ArrayList<>();
+
+        if (cf != null && !cf.trim().isEmpty()) {
+            Persona p = persService.searchByCf(cf.trim());
+            if (p != null) risultati.add(p);
+        }
+
+        if (risultati.isEmpty()) {
+            model.addAttribute("msg", "Nessun risultato trovato.");
+        }
+
+        model.addAttribute("open", "cf");
+        model.addAttribute("item", risultati);
+        return "gestione";
+    }
+
+	
+	@GetMapping("/gestione/nome-cognome")
+    public String gestioneByNomeCognome(@RequestParam String nome,
+                                        @RequestParam String cognome,
+                                        Model model) {
+
+        List<Persona> risultati = new ArrayList<>();
+
+        if (nome != null && !nome.trim().isEmpty() && cognome != null && !cognome.trim().isEmpty()) {
+            risultati = persService.searchByNomeAndCognome(nome.trim(), cognome.trim());
+        }
+
+        if (risultati.isEmpty()) {
+            model.addAttribute("msg", "Nessun risultato trovato.");
+        }
+
+        model.addAttribute("open", "nc");
+        model.addAttribute("item", risultati);
+        return "gestione";
+    }
 	
 	@GetMapping("/{id}/delete")
 	public String deleteById(Model model, @PathVariable Integer id)

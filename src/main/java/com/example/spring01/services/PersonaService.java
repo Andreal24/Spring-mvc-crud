@@ -54,9 +54,17 @@ public void deleteById(Integer id)
 
 }
 
+public Persona searchByCf(String cf) {
+	return personaRepo.findByCf(cf);
+}
 
+public List<Persona> searchByNomeAndCognome(String nome, String cognome) {
+    return personaRepo.findByNomeAndCognome(nome, cognome);
+}
 
-
+public List<Persona> searchByNome(String nome) {
+    return personaRepo.findByNome(nome);
+}
 
 
 }

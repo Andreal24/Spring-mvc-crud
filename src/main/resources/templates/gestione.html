@@ -8,52 +8,129 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.rtl.min.css" integrity="sha384-CfCrinSRH2IR6a4e6fy2q6ioOX7O6Mtm1L9vRvFZ1trBncWmMePhzvafv7oIcWiW" crossorigin="anonymous">
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <title>Gestione Dipendenti</title>
   </head>
   <body>
-    
-    
-    <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Nome</th>
-      <th scope="col">Cognome</th>
-      <th scope="col">Codice Fiscale</th>
-    </tr>
-  </thead>
+
   
-  <tbody>
-    <tr th:each="p: ${item}">
-      <td th:text="${p.id}"> </td>
-      <td th:text="${p.nome}"> </td>
-      <td th:text="${p.cognome}"> </td>
-      <td th:text="${p.cf}"> </td>
-      <td>
-       <a class="btn btn-primary" onclick="return confirm('Sei sicuro di Eliminare?')" th:href="@{|/${p.id}/delete|}" role="button">ELIMINA </a>
-       
-       <a class="btn btn-primary" href="" role="button">MODIFICA </a>
-      </td>
+    <div class="container mt-3">
+
+      <div class="d-flex justify-content-end mb-2">
+        <a class="btn btn-outline-primary btn-sm me-2"
+           data-bs-toggle="collapse"
+           href="#collapseCf"
+           role="button"
+           aria-expanded="false"
+           aria-controls="collapseCf">
+          Ricerca per Codice Fiscale
+        </a>
+
+        <a class="btn btn-outline-primary btn-sm"
+           data-bs-toggle="collapse"
+           href="#collapseNc"
+           role="button"
+           aria-expanded="false"
+           aria-controls="collapseNc">
+          Ricerca per Nome e Cognome
+        </a>
+      </div>
+
       
-    </tr>
+      <div th:if="${msg}" class="alert alert-warning" th:text="${msg}"></div>
+
+      
+      <div class="collapse mb-3"
+           id="collapseCf"
+           th:classappend="${open}=='cf' ? ' show' : ''">
+        <div class="card card-body">
+          <form method="get" th:action="@{/gestione/cf}">
+            <div class="row g-2 align-items-center">
+              <div class="col-md-6">
+                <input type="text" name="cf" class="form-control" placeholder="Codice Fiscale">
+              </div>
+              <div class="col-md-auto">
+                <button type="submit" class="btn btn-primary">Cerca</button>
+                <a th:href="@{/gestione}" class="btn btn-secondary">Reset</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      
+      <div class="collapse mb-3"
+           id="collapseNc"
+           th:classappend="${open}=='nc' ? ' show' : ''">
+        <div class="card card-body">
+          <form method="get" th:action="@{/gestione/nome-cognome}">
+            <div class="row g-2 align-items-center">
+              <div class="col-md-4">
+                <input type="text" name="nome" class="form-control" placeholder="Nome">
+              </div>
+              <div class="col-md-4">
+                <input type="text" name="cognome" class="form-control" placeholder="Cognome">
+              </div>
+              <div class="col-md-auto">
+                <button type="submit" class="btn btn-primary">Cerca</button>
+                <a th:href="@{/gestione}" class="btn btn-secondary">Reset</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
     
-  </tbody>
-</table>
-    
-    
-    
-    
+
+
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Cognome</th>
+          <th scope="col">Codice Fiscale</th>
+          <th scope="col">Azioni</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="p: ${item}">
+          <td th:text="${p.id}"> </td>
+          <td th:text="${p.nome}"> </td>
+          <td th:text="${p.cognome}"> </td>
+          <td th:text="${p.cf}"> </td>
+          <td>
+            <a class="btn btn-primary"
+               onclick="return confirm('Sei sicuro di Eliminare?')"
+               th:href="@{|/${p.id}/delete|}"
+               role="button">ELIMINA </a>
+
+            <a class="btn btn-primary" href="" role="button">MODIFICA </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
     <a href="/" class="btn btn-primary">homepage</a>
 
-    <!-- Optional JavaScript; choose one of the two! -->
+  
+    <script>
+      const cf = document.getElementById('collapseCf');
+      const nc = document.getElementById('collapseNc');
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+      cf.addEventListener('show.bs.collapse', () => {
+        const bsNc = bootstrap.Collapse.getOrCreateInstance(nc);
+        bsNc.hide();
+      });
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
-    -->
+      nc.addEventListener('show.bs.collapse', () => {
+        const bsCf = bootstrap.Collapse.getOrCreateInstance(cf);
+        bsCf.hide();
+      });
+    </script>
+
   </body>
 </html>
