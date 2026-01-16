@@ -13,18 +13,35 @@
 </head>
 <body>
 	<div class="container mt-3">
-		<h1>Benvenuto</h1>
-		<div th:if="${msg != null}">
-			<h3 th:text="${msg}"></h3>
-		</div>
+		<h1
+			th:text="${p.id == 0} ? 'Registrazione Persona' : 'Modifica Persona'"></h1>
 
-		<div th:if="${pers != null}">
-			<span th:text="${pers.nome + ' ' + pers.cognome}"> </span>
-		</div>
+		<form method="post" th:action="@{/new}" th:object="${p}">
+			<input type="hidden" th:field="*{id}">
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="inputGroup-sizing-default">Nome</span>
+				<input required type="text" th:field="*{nome}" class="form-control">
+			</div>
 
-		<br> <a class="btn btn-primary" href="/new" role="button">INSERIMENTO
-		</a> <a class="btn btn-primary" href="/gestione" role="button">GESTISCI</a>
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="inputGroup-sizing-default">Cognome</span>
+				<input required type="text" th:field="*{cognome}"
+					class="form-control">
+			</div>
+
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="inputGroup-sizing-default">Codice
+					fiscale</span> <input required type="text" th:field="*{cf}"
+					class="form-control">
+			</div>
+
+			<button type="reset" class="btn btn-primary">Cancella</button>
+			<button type="submit" class="btn btn-primary"
+				th:text="${p.id == 0} ? 'Invia' : 'Modifica'"></button>
+
+		</form>
 	</div>
+
 	<!-- Optional JavaScript; choose one of the two! -->
 
 	<!-- Option 1: Bootstrap Bundle with Popper -->
